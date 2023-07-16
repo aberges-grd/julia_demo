@@ -1,11 +1,12 @@
 using Images
+using ColorSchemes
 
 f_c(c::Complex) = z::Complex -> z^2 + c
 
 n = 1600 * 2 # 3200
 m = 925 * 2 # 1850
 c = -0.77146 - 0.10119im
-N = 1000
+N = 3000
 width = [-1.65 1.65]
 height = width * m / n
 
@@ -31,4 +32,7 @@ end
 # compute
 J_f = julia_set(f_c(c), complex_grid, N)'
 
-save("julia_set.png", (J_f .% 10) ./ 10)
+cs = ColorSchemes.diverging_rainbow_bgymr_45_85_c67_n256
+scale(X) = X / maximum(X)
+
+save("julia_set.png", J_f .|> log1p |> scale .|> x -> ifelse(x == 1, RGB(0, 0, 0), get(cs, x)))
