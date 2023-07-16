@@ -15,9 +15,9 @@ complex_grid = [complex(a, b)
                 b in range(height[1], length=m, stop=height[2])];
 
 
-function escape_time(f::Function, z::Complex, maxiter::Int64 = 10^3)::Int64
+function escape_time(f::Function, z::Complex, maxiter::Int64=10^3)::Int64
     for n = 1:maxiter
-        if (abs(z)>2)
+        if (abs(z) > 2)
             return n
         end
         z = f(z)
@@ -26,7 +26,7 @@ function escape_time(f::Function, z::Complex, maxiter::Int64 = 10^3)::Int64
 end
 
 # compute
-@time J_f = map(z -> escape_time(f,z, N), complex_grid)'
+@time J_f = map(z -> escape_time(f_c(c), z, N), complex_grid)'
 
 cs = ColorSchemes.diverging_rainbow_bgymr_45_85_c67_n256
 scale(X) = X / maximum(X)
