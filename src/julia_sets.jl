@@ -14,23 +14,19 @@ complex_grid = [complex(a, b)
                 for a in range(width[1], length=n, stop=width[2]),
                 b in range(height[1], length=m, stop=height[2])];
 
-function julia_set(f::Function, grid, maxiter=10^3)
-    n_matrix = zeros(size(grid))
-    p = 0
-    for point in grid
-        p += 1
-        n = 0
-        while (abs(point) <= 2 && n < maxiter)
-            point = f(point)
-            n += 1
+
+function escape_time(f::Function, z::Complex, maxiter::Int64 = 10^3)::Int64
+    for n = 1:maxiter
+        if (abs(z)>2)
+            return n
         end
-        n_matrix[p] = n
+        z = f(z)
     end
-    return n_matrix
+    return maxiter
 end
 
 # compute
-J_f = julia_set(f_c(c), complex_grid, N)'
+@time J_f = map(z -> escape_time(f,z, N), complex_grid)'
 
 cs = ColorSchemes.diverging_rainbow_bgymr_45_85_c67_n256
 scale(X) = X / maximum(X)
