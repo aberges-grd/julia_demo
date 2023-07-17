@@ -1,7 +1,7 @@
 using Images
 using ColorSchemes
 using Distributed, SharedArrays;
-addprocs(4);
+# addprocs(4);
 
 f_c(c::Complex) = z::Complex -> z^2 + c
 
