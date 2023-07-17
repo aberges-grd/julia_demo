@@ -2,3 +2,7 @@ name = "julia_demo"
 uuid = "93e7b497-b9e2-4783-b71d-b15f2872cb01"
 authors = ["Adrian Berges Enfedaque <aberges@gradiant.org>"]
 version = "0.1.0"
+
+[deps]
+ImageView = "86fae568-95e7-573e-a6b2-d8a6b900c9ef"
+JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
