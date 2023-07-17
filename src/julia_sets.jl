@@ -1,3 +1,5 @@
+import Pkg;
+Pkg.instantiate();
 using JLD2
 
 module JuliaSets
@@ -21,12 +23,15 @@ end
 function set_distance(f::Function, fprime::Function, z0::Complex, maxiter::Int64=1000)
     dz = 1.0 + 0.0im
     z = z0
-    for n = 1:maxiter
+    for _ = 1:maxiter
         z, dz = f(z), fprime(z, dz)
-        if abs(z) > 2 break; end
+        if abs(z) > 2
+            break
+        end
     end
 
-    return abs(z) * log(abs(z)) / abs(z)
+    h = 0.5 * log(abs(z)) * sqrt(abs(z) / abs(dz))
+    return clamp(h*250, 0.0, 1.0)
 end
 
 end
@@ -34,9 +39,8 @@ end
 parameters = (
     n=1600 * 2, # 3200
     m=925 * 2, # 1850
-    # c=-0.77146 - 0.10119im,
-    c=-0.8 - 0.16im,
-    N=300,
+    c=-0.770826391 + 0.115528513im,
+    N=600,
     width=[-1.65 1.65],
 )
 
@@ -55,6 +59,7 @@ function main(parameters::NamedTuple)::Nothing
     # compute
     @time J_f = (complex_grid .|> z -> set_distance(z -> f(z, c), f_prime, z, N))'
 
+    print("\nmax = $(maximum(J_f)) \n min = $(minimum(J_f))")
     jldsave("julia_sets.jld"; J_f)
     nothing
 end
