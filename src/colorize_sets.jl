@@ -5,13 +5,11 @@ using JLD2
 
 
 function render_2d()
-    # cs = ColorSchemes.diverging_rainbow_bgymr_45_85_c67_n256
-    # colorizer(x) = cs[x]
+    cs = ColorSchemes.curl
     scaler(X) = (X .- minimum(X))/(maximum(X) - minimum(X))
-    colorizer(x) = ifelse(x < 9e-1, RGB(0, 0, 0), RGB(1,1,1)) # B/N
-    # J = load("julia_sets.jld", "J_f")
+    colorizer(x) = ifelse(x == 1.0, RGB(0, 0, 0), cs[x]) # B/N
     J = load("mandelbrot_set.jld", "J_f")
-    save("mandelbrot_set.png", J |> scaler .|> colorizer)
+    save("mandelbrot_set.png", J  .|> log1p |> scaler .|> colorizer)
 end
 
 render_2d()
