@@ -28,7 +28,8 @@ function set_distance(f::Function, fprime::Function, z0::Complex, maxiter::Int64
         end
     end
 
-    return abs(z) * log(abs(z)) / abs(dz)
+    h = 0.5 * log(abs(z)) * sqrt(abs(z) / abs(dz))
+    return clamp(h*250, 0.0, 1.0)
 end
 
 end
@@ -53,8 +54,9 @@ function main(parameters::NamedTuple)::Nothing
                     b in range(height[1], length=m, stop=height[2])]
 
     # precompile
-    @time (complex_grid[1:5, 1:5] .|> z -> escape_time(z -> f(zero, z), z, N))'
+    # @time (complex_grid[1:5, 1:5] .|> z -> set_distance(z -> f(zero, z), f_prime, z, N))'
     # compute
+    # @time J_f = (complex_grid .|> c -> set_distance(z -> f(z, c), f_prime, zero, N))'
     @time J_f = (complex_grid .|> c -> escape_time(z -> f(z, c), zero, N))'
 
     jldsave("mandelbrot_set.jld"; J_f)
