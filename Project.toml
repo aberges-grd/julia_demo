@@ -2,3 +2,6 @@ name = "julia_demo"
 uuid = "93e7b497-b9e2-4783-b71d-b15f2872cb01"
 authors = ["Adrian Berges Enfedaque <aberges@gradiant.org>"]
 version = "0.1.0"
+
+[deps]
+Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
